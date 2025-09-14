@@ -6,10 +6,12 @@ const poolConfig = {
     host: process.env.DB_HOST,
     port: Number(process.env.DB_PORT) || 5432,
     database: process.env.DB_NAME,
+    max : 3,
+    idleTimeoutMillis : 100000
 };
 
 const connectDB = async () => {
-    const pool = new Pool(poolConfig);
+    const pool = new Pool(poolConfig);  
     try {
         await pool.connect();
         console.log("Connected to PostgreSQL");
