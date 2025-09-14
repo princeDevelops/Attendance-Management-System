@@ -5,7 +5,7 @@ async function getBatches(req, res) {
     try {
         const batches = await fetchBatches();
         console.log(batches);
-        return;
+        res.status(200).json(batches);
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
