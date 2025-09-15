@@ -1,42 +1,28 @@
-import React from "react";
 import axios from "axios";
 import { useState, useEffect } from "react";
+import useBatches from "../../hooks/useBatches";
 
 const AddSession = () => {
   const [selected, setSelected] = useState("");
-  const [batches, setBatches] = useState([]);
+  const { batches, loading} = useBatches();
 
   const handleChange = (e) => {
     setSelected(e.target.value);
   };
-
-  const fetchBatches = async () => {
-    try {
-      const res = await axios.get("http://localhost:5000/batches");
-      console.log(`here are the batches : ${res.data}`);
-      setBatches(res.data);
-    } catch (err) {
-      console.log(`Error while fetching batches: ${err}`);
-    }
-  };
-
-  useEffect(() => {
-    fetchBatches();
-  }, []);
-
-  useEffect(() => {
-    console.log("Updated batches:", batches);
-  }, [batches]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
     alert(`You Selected : ${selected}`);
   };
 
+  if (loading) return <p>Loading...</p>;
+
   return (
     <>
       <h1>Add Session</h1>
       <form onSubmit={handleSubmit}>
+
+        {/* Batch Selection */}
         <label htmlFor="batch-name">Select Batch</label>
         <select
           name="batch-name"
@@ -44,8 +30,25 @@ const AddSession = () => {
           value={selected}
           onChange={handleChange}
         >
-          <option value=""></option>
+          {batches.map((batch) => {
+            return (
+              <option key={batch.batch_id} value={batch.batch_id}>
+                {batch.batch_name}
+              </option>
+            );
+          })}
         </select>
+
+
+          {/* Faculty Selection */}
+          {/* Subject Selection */}
+          {/* Date Selection */}
+          {/* Time Selection */}
+          {/* Duration */}
+          {/* Venue */}
+          {/* type */}
+
+
       </form>
     </>
   );
