@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
-import useBatches from "../../hooks/useBatches";
+import useBatches from "../../hooks/useBatches";  
 
 const AddSession = () => {
   const [selected, setSelected] = useState("");
