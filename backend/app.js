@@ -5,6 +5,7 @@ import morgan from "morgan";
 import batchRoutes from './routes/batchRoutes.js';
 import subjectRoutes from './routes/subjectRoutes.js';
 import facultyRoutes from './routes/facultyRoutes.js';
+import locationRoutes from './routes/locationRoutes.js';
 
 const app = express();
 
@@ -24,6 +25,7 @@ app.get('/', (req, res) => {
 app.use('/batches', batchRoutes);
 app.use('/subjects', subjectRoutes);
 app.use('/faculties',facultyRoutes);
+app.use('/locations',locationRoutes);
 
 
 app.use((err, req, res, next) => {
