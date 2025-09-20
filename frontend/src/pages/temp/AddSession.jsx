@@ -5,17 +5,19 @@ import useFaculties from "../../hooks/useFaculties";
 import useSubjects from "../../hooks/useSubjects";
 import DateSelector from "../../components/DateSelector";
 import TimeSelector from "../../components/TimeSelector";
+import useVenues from "../../hooks/useVenues";
 
 const AddSession = () => {
   const [selectedBatch, setSelectedBatch] = useState("");
   const [selectedFaculty, setSeelctedFaculty] = useState("");
   const [selectedSubject, setSelectedSubject] = useState("");
-  const [selectedLocation, setSelectedLocation] = useState("");
+  const [selectedVenue, setSelectedVenue] = useState("");
   const [selectedType, setSelectedType] = useState("");
 
   const { batches, batchLoading } = useBatches([]);
   const { faculties, facultyLoading } = useFaculties([]);
   const { subjects, loadingSubjects } = useSubjects([]);
+  const { venues, loadingVenues} = useVenues([]);
 
   console.log(subjects);
 
@@ -31,6 +33,9 @@ const AddSession = () => {
     setSelectedSubject(e.target.value);
   };
 
+  const handleVenueChange = (e) =>{
+    setSelectedVenue(e.target.value);
+  }
   const handleSubmit = (e) => {
     e.preventDefault();
     alert(`You Selected : ${selectedBatch}`);
@@ -115,6 +120,21 @@ const AddSession = () => {
 
         {/* Venue */}
 
+        <label htmlFor="venue-name">Select Batch</label>
+        <select
+          name="venue-name"
+          id="venue-name"
+          value={selectedVenue}
+          onChange={handleVenueChange}
+        >
+          {venues.map((venue) => {
+            return (
+              <option key={venue.location_id} value={venue.location_name}>
+                {venue.location_name}
+              </option>
+            );
+          })}
+        </select>
         
         {/* type */}
       </form>
