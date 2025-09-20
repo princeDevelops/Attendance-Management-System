@@ -6,6 +6,7 @@ import batchRoutes from './routes/batchRoutes.js';
 import subjectRoutes from './routes/subjectRoutes.js';
 import facultyRoutes from './routes/facultyRoutes.js';
 import locationRoutes from './routes/locationRoutes.js';
+import classTypesRoutes from './routes/classTypesRoutes.js';
 
 const app = express();
 
@@ -26,6 +27,7 @@ app.use('/batches', batchRoutes);
 app.use('/subjects', subjectRoutes);
 app.use('/faculties',facultyRoutes);
 app.use('/locations',locationRoutes);
+app.use('/classtypes',classTypesRoutes);
 
 
 app.use((err, req, res, next) => {
