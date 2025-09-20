@@ -2,28 +2,29 @@ import { useEffect, useState } from "react";
 import fetchBatches from "../services/batchService";
 
 
-const useBatches = () =>{
+const useBatches = () => {
     const [batches, setBatches] = useState([]);
-    const [loading, setLoading] = useState(true);
+    const [batchLoading, setbatchLoading] = useState(true);
+    const [batchError, setBatchError] = useState(null);
 
 
-    const load = async ()=>{
-        try{
+    const load = async () => {
+        try {
             const data = await fetchBatches();
             setBatches(data);
-        }catch(err){
+        } catch (err) {
             console.log(err);
-            
-        }finally{
-            setLoading(false);
-        }       
+            setBatchError(err)
+        } finally {
+            setbatchLoading(false);
+        }
     };
 
-    useEffect(()=>{
+    useEffect(() => {
         load();
-    },[]);
+    }, []);
 
-    return {batches, loading};
+    return { batches, batchLoading, batchError, reloadBatch: load };
 }
 
 export default useBatches;

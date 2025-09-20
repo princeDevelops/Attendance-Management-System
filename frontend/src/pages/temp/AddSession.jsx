@@ -1,34 +1,55 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
-import useBatches from "../../hooks/useBatches";  
+import useBatches from "../../hooks/useBatches";
+import useFaculties from "../../hooks/useFaculties";
+import useSubjects from "../../hooks/useSubjects";
+import DateSelector from "../../components/DateSelector";
+import TimeSelector from "../../components/TimeSelector";
 
 const AddSession = () => {
-  const [selected, setSelected] = useState("");
-  const { batches, loading} = useBatches();
+  const [selectedBatch, setSelectedBatch] = useState("");
+  const [selectedFaculty, setSeelctedFaculty] = useState("");
+  const [selectedSubject, setSelectedSubject] = useState("");
+  const [selectedLocation, setSelectedLocation] = useState("");
+  const [selectedType, setSelectedType] = useState("");
 
-  const handleChange = (e) => {
-    setSelected(e.target.value);
+  const { batches, batchLoading } = useBatches([]);
+  const { faculties, facultyLoading } = useFaculties([]);
+  const { subjects, loadingSubjects } = useSubjects([]);
+
+  console.log(subjects);
+
+  const handleBatchCHange = (e) => {
+    setSelectedBatch(e.target.value);
+  };
+
+  const handleFacultyChange = (e) => {
+    setSeelctedFaculty(e.target.value);
+  };
+
+  const handleSubjectChange = (e) => {
+    setSelectedSubject(e.target.value);
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    alert(`You Selected : ${selected}`);
+    alert(`You Selected : ${selectedBatch}`);
   };
 
-  if (loading) return <p>Loading...</p>;
+  if (batchLoading) return <p>Loading Batches...</p>;
+  if (facultyLoading) return <p>Loading Faculties...</p>;
 
   return (
     <>
       <h1>Add Session</h1>
       <form onSubmit={handleSubmit}>
-
         {/* Batch Selection */}
         <label htmlFor="batch-name">Select Batch</label>
         <select
           name="batch-name"
           id="batch-name"
-          value={selected}
-          onChange={handleChange}
+          value={selectedBatch}
+          onChange={handleBatchCHange}
         >
           {batches.map((batch) => {
             return (
@@ -39,16 +60,63 @@ const AddSession = () => {
           })}
         </select>
 
+        {/* Faculty Selection */}
 
-          {/* Faculty Selection */}
-          {/* Subject Selection */}
-          {/* Date Selection */}
-          {/* Time Selection */}
-          {/* Duration */}
-          {/* Venue */}
-          {/* type */}
+        <label htmlFor="faculty-name">Select Faculty</label>
+        <select
+          name="faculty-name"
+          id="faculty-name"
+          value={selectedFaculty}
+          onChange={handleFacultyChange}
+        >
+          {faculties.map((faculty) => {
+            return (
+              <option key={faculty.first_name} value={faculty.first_name}>
+                {faculty.first_name + " " + faculty.last_name}
+              </option>
+            );
+          })}
+        </select>
 
+        {/* Subject Selection */}
 
+        <label htmlFor="subject-name">Select Subject</label>
+        <select
+          name="subject-name"
+          id="subject-name"
+          value={selectedSubject}
+          onChange={handleSubjectChange}
+        >
+          {subjects.map((subject) => {
+            return (
+              <option key={subject.subject_name} value={subject.subject_name}>
+                {subject.subject_name}
+              </option>
+            );
+          })}
+        </select>
+
+        {/* Date Selection */}
+        <DateSelector />
+        {/* Time Selection */}
+        <TimeSelector />
+
+        {/* Duration */}
+        <label htmlFor="session-duration">
+          Enter Duration (in minutes)
+        </label>
+        <input
+          id="session-duration" // 👈 matches htmlFor
+          type="number"
+          min="60"
+          max="300"
+          placeholder="0"
+        />
+
+        {/* Venue */}
+
+        
+        {/* type */}
       </form>
     </>
   );
