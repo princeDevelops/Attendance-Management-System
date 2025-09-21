@@ -26,10 +26,10 @@ app.get('/', (req, res) => {
 
 app.use('/batches', batchRoutes);
 app.use('/subjects', subjectRoutes);
-app.use('/faculties',facultyRoutes);
-app.use('/locations',locationRoutes);
-app.use('/classtypes',classTypesRoutes);
-app.use('/sessions',sessionRoutes);
+app.use('/faculties', facultyRoutes);
+app.use('/locations', locationRoutes);
+app.use('/classtypes', classTypesRoutes);
+app.use('/sessions', sessionRoutes);
 
 
 app.use((err, req, res, next) => {
