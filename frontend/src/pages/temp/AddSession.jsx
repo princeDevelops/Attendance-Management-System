@@ -1,12 +1,12 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import useBatches from "../../hooks/useBatches";
 import useFaculties from "../../hooks/useFaculties";
 import useSubjects from "../../hooks/useSubjects";
-import DateSelector from "../../components/DateSelector";
-import TimeSelector from "../../components/TimeSelector";
 import useVenues from "../../hooks/useVenues";
 import useClassTypes from "../../hooks/useClassTypes";
+
+import createSession from "../../services/sessionService";
 
 const AddSession = () => {
   const [sessionData, setSessionData] = useState({
@@ -14,7 +14,7 @@ const AddSession = () => {
     faculty: "",
     subject: "",
     duration: "",
-    sessionDate: "",
+    sessionDate: "", // This will now store the YYYY-MM-DD string
     startTime: "",
     venue: "",
     classType: "",
@@ -34,13 +34,66 @@ const AddSession = () => {
   const { classTypes = [], classTypesLoading } = useClassTypes([]);
 
   // Form submit handler
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    alert(`You selected Batch ID: ${sessionData.batch}`);
-    // Later: use axios.post() to send form data to backend
+
+    // Add a validation check for all required fields
+    if (
+      !sessionData.batch ||
+      !sessionData.faculty ||
+      !sessionData.subject ||
+      !sessionData.duration ||
+      !sessionData.sessionDate ||
+      !sessionData.startTime ||
+      !sessionData.venue ||
+      !sessionData.classType
+    ) {
+      alert("Please fill in all the required fields.");
+      return;
+    }
+
+    try {
+      // Combine date + time into ISO datetime string
+      const session_datetime = new Date(
+        `${sessionData.sessionDate}T${sessionData.startTime}:00`
+      ).toISOString();
+
+      const payload = {
+        session_datetime,
+        duration_minutes: parseInt(sessionData.duration, 10),
+        batch_id: parseInt(sessionData.batch, 10),
+        faculty_id: parseInt(sessionData.faculty, 10),
+        subject_id: parseInt(sessionData.subject, 10),
+        session_type: sessionData.classType, // now string like "theory"
+        location_id: parseInt(sessionData.venue, 10),
+        status: "scheduled",
+        notes: null,
+      };
+
+      console.log("Sending payload:", payload);
+
+      const result = await createSession(payload);
+
+      alert("Session created successfully!");
+      console.log(result);
+
+      // Reset form
+      setSessionData({
+        batch: "",
+        faculty: "",
+        subject: "",
+        duration: "",
+        sessionDate: "",
+        startTime: "",
+        venue: "",
+        classType: "",
+      });
+    } catch (err) {
+      console.error(err);
+      alert("Failed to create session");
+    }
   };
 
-  // Show loading state while data is being fetched
   if (
     batchLoading ||
     facultyLoading ||
@@ -101,15 +154,23 @@ const AddSession = () => {
         </select>
 
         {/* Date Selection Component */}
-        <DateSelector
+        <label htmlFor="session-date">Select Session Date</label>
+        <input
+          id="session-date"
+          type="date"
           value={sessionData.sessionDate}
-          onChange={(date) => handleSessionDataChange("sessionDate", date)}
+          onChange={(e) =>
+            handleSessionDataChange("sessionDate", e.target.value)
+          }
         />
 
         {/* Time Selection Component */}
-        <TimeSelector
+        <label htmlFor="session-time">Select Session Time</label>
+        <input
+          id="session-time"
+          type="time"
           value={sessionData.startTime}
-          onChange={(time) => handleSessionDataChange("startTime", time)}
+          onChange={(e) => handleSessionDataChange("startTime", e.target.value)}
         />
 
         {/* Duration Input */}
@@ -120,6 +181,7 @@ const AddSession = () => {
           min="60"
           max="300"
           placeholder="0"
+          value={sessionData.duration}
           onChange={(e) => handleSessionDataChange("duration", e.target.value)}
         />
 
@@ -147,7 +209,7 @@ const AddSession = () => {
         >
           <option value="">-- Select Class Type --</option>
           {classTypes.map((classType) => (
-            <option key={classType.class_type_id} value={classType.type_id}>
+            <option key={classType.class_type_id} value={classType.type_name}>
               {classType.type_name}
             </option>
           ))}

@@ -7,6 +7,7 @@ import subjectRoutes from './routes/subjectRoutes.js';
 import facultyRoutes from './routes/facultyRoutes.js';
 import locationRoutes from './routes/locationRoutes.js';
 import classTypesRoutes from './routes/classTypesRoutes.js';
+import sessionRoutes from "./routes/sessionRoutes.js";
 
 const app = express();
 
@@ -28,6 +29,7 @@ app.use('/subjects', subjectRoutes);
 app.use('/faculties',facultyRoutes);
 app.use('/locations',locationRoutes);
 app.use('/classtypes',classTypesRoutes);
+app.use('/sessions',sessionRoutes);
 
 
 app.use((err, req, res, next) => {
