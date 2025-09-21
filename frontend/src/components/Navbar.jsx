@@ -7,7 +7,7 @@ const Navbar = () => {
       <Link to="/">Weekly Sessions</Link> | {""}
       <Link to="/faculty-sessions">Faculty Sessions</Link> | {""}
       <Link to="/attendance-report">Attendance Report</Link> | {""}
-      <Link to="/class-sessions">Class Sessions</Link>
+      <Link to="/sessions">Class Sessions</Link>
     </nav>
   );
 };

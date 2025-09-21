@@ -2,10 +2,8 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import Navbar from "../../components/Navbar";
 import useBatches from "../../hooks/useBatches";
-import DateSelector from "../../components/DateSelector";
 
-
-const ClassSessions = () => {
+const Sessions = () => {
   const [selected, setSelected] = useState();
   const { batches, loading } = useBatches();
 
@@ -18,7 +16,7 @@ const ClassSessions = () => {
       <Navbar />
       <h1>Class Sessions</h1>
       <div>
-        <Link to="/class-sessions/add-session"> + Add Session</Link>
+        <Link to="/sessions/add-session"> + Add Session</Link>
         <div>
           {/* Batch Selection */}
           <label htmlFor="batch-name">Select Batch</label>
@@ -36,10 +34,18 @@ const ClassSessions = () => {
               );
             })}
           </select>
+          
+          {/* Date Selection Component */}
+          <label htmlFor="session-date">Select Session Date</label>
+          <input
+            id="session-date"
+            type="date"
+            // value={sessionData.sessionDate}
+            // onChange={(e) =>
+            //   handleSessionDataChange("sessionDate", e.target.value)
+            // }
+          />
 
-          {/* Date Selection */}
-          <label htmlFor="session-date">Select Date : </label>
-          <DateSelector></DateSelector>
           <button>Get Sessions</button>
         </div>
       </div>
@@ -47,4 +53,4 @@ const ClassSessions = () => {
   );
 };
 
-export default ClassSessions;
+export default Sessions;
